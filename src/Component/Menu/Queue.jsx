@@ -33,8 +33,6 @@ const Queue = () => {
     if (state.loading === true) {
       loaderPromise().then(() => setState({...state,loading:false}));
     }
-
-    console.log(state);
   });
 
   const loaderPromise = () => {

@@ -2,7 +2,6 @@
   background: #FFFFFF;
   width: 100%;
 }
-
 /* navbar home */
 .t-up{
   color:rgb(87, 58, 224);
@@ -20,7 +19,6 @@
   color: rgb(42,180,94);
   font-family: 'Roboto', sans-serif;
 }
-
 /* slider */
 .slider-control-centerleft{
   display: none;
@@ -194,7 +192,6 @@
 .button-booking:focus{
   border:0px !important;
   outline: 0px !important;
-
 }
 
 
@@ -202,19 +199,25 @@
 .news{
   background: #FAFAFA;
 }
+.video-news{
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  width: 100%;
+  height: 200px;
+}
 .img-news{
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   width: 100%;
 }
 .card-body{
   width: 100% !important;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 .news-ktg{
   color: #3D47DB;
-  font-size: 12px;
+  font-size: 13px;
   text-transform: uppercase;
   font-family: 'Roboto',sans-serif;
   font-weight: bold;
@@ -229,15 +232,15 @@
   justify-content: justify;
 }
 .news-desc{
-  color: #C3C3C7;
+  color: #929191;
   text-align: justify;
   justify-content: justify;
-  font-family: 'Nunito', sans-serif;
   font-weight: 500;
 }
 .news-date{
-  color: #929191;
+  color: #C3C3C7;
   font-size: 12px;
+  font-family: 'Recursive',sans-serif;
 }
 .news-icon{
   font-size: 6px;
@@ -262,6 +265,155 @@
 .navlink{
   padding: 0px !important;
 }
+.button-news{
+  font-size: 12px !important;
+  font-family: 'Roboto', sans-serif !important;
+  border-radius: 50px !important;
+  background: #3D47DB !important;
+}
+.button-news:focus{
+  border:0px !important;
+  outline: 0px !important;
+}
+
+.skeleton{
+  position: relative;
+  bottom: 80px;
+  margin:0px !important;
+  width: 100% !important;
+  height: 400px !important;
+}
+.skeleton1{
+  margin:0px !important;
+  width: 60% !important;
+  height: 20px !important;
+}
+.skeleton2{
+  margin:0px !important;
+  width: 80% !important;
+  height: 20px !important;
+}
+.skeleton3{
+  margin:0px !important;
+  width: 50% !important;
+  height: 20px !important;
+}
+.skeleton4{
+  margin:0px !important;
+  width: 100% !important;
+  height: 20px !important;
+}
+.skeleton-text{
+  position: relative ;
+  bottom: 140px ;
+}
+.news-bookmark{
+  width: 25px;
+  position: relative;
+  right: -5%;
+  bottom: 4px;
+  cursor: pointer;
+}
+@media only screen and (min-width: 476px) {
+  .news-bookmark{
+    width: 30px;
+    right: -2.8%;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .news-bookmark{
+    right: -1%;
+    bottom: 5px;
+
+  }
+}
+
+/* Detail News */
+.img-detail-news{
+  width: 100%;
+}
+.detail-news-date{
+  color: rgb(233, 72, 92);
+  font-size: 14px;
+  font-family: 'Recursive',sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: relative;
+  bottom: 16px;
+}
+.detail-news-title{
+  color: #38373A;
+  font-family: 'Recursive', sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 20px;
+  text-align: center;
+}
+.detail-news-content{
+  text-align: justify;
+  justify-content: justify;
+  color: #929191;
+  font-family: 'Kanit',sans-serif;
+  font-weight: 400;
+}
+.detail-nav-img{
+  width: 100%;
+}
+.detail-row-content{
+  border-top-left-radius: 50px !important;
+  border-top-right-radius: 50px !important;
+  left: 15px;
+  width: 100%;
+  z-index: 15;
+  position: relative;
+  bottom: 48px;
+  background-color: #FAFAFA;
+}
+.navbar-sendiri{
+  width: 100%;
+  position: relative;
+}
+.bg-for-opacity{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: #3D47DB;
+  top: 0px;
+  opacity: 0.8;
+  z-index: 2;
+}
+.detail-arrow{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: -35%;
+  left: 8%;
+  z-index: 3;
+  color: #fff;
+  font-size: 20px;
+}
+.detail-arrow1{
+  position: absolute;
+  width: 24%;
+  height: 24%;
+  top: 4%;
+  right: 0%;
+  z-index: 3;
+  color: #fff;
+  font-size: 20px;
+  cursor:pointer;
+}
+.news-ktg-tgl{
+  position: relative;
+  bottom:40px;
+  color: #fff;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-family: 'Recursive',sans-serif;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
 
 /* call us */
 .info{
@@ -446,4 +598,20 @@
   color: #3D47DB;
   left: 10px;
   top: 10px;
+}
+
+
+/* style marker */
+.gm-style .gm-style-iw-c{
+  background-color: #fff;
+}
+.gm-style .gm-style-iw-d{
+  overflow: hidden !important;
+}
+.text-mark{
+  text-align: center;
+  color: #3D47DB;
+  font-family: 'Recurisve',sans-serif;
+  font-weight: bold;
+  font-size: 25px;
 }

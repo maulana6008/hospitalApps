@@ -1,15 +1,10 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from 'react-bootstrap/Navbar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import {Link, useRouteMatch, Switch, Route} from 'react-router-dom';
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import NewsContent from '../NewsContent';
-import Axios from 'axios';
+import {Link} from 'react-router-dom';
+import Iframe from 'react-iframe';
 
 const newsData = [
   {
@@ -185,62 +180,100 @@ const newsData = [
   }
 ]
 
-let labelData = [];
 
-newsData.forEach((item) => {
-  if (labelData.indexOf(item.category) === -1) {
-    labelData.push(item.category)
+const Artikel = ( {match} ) => {
+
+  // how delete array
+  // let cobaArray = ["3E8EF0CB-9A85-78D0-65BB-EFA404C28181","EA87B9DA-C208-4623-063D-9B1E7F744C7A"];
+  // let index = cobaArray.indexOf("EA87B9DA-C208-4623-063D-9B1E7F744C7A");
+  //
+  // cobaArray.shift();
+  // console.log(cobaArray);
+
+  const filterNews = (data) => {
+    return data.news_id === match.params.news_id;
   }
-});
 
-const News = (value) => {
-  let {path, url} = useRouteMatch();
+  const newsDetails = newsData.find(filterNews)
 
-
+  if (localStorage.getItem('bookmark') !== null) {
+    let checkBookmark = JSON.parse(localStorage.getItem('bookmark')).indexOf(match.params.news_id);
+    var bookmark = false;
+    if (checkBookmark >= 0) {
+      bookmark = true
+    }else{
+      bookmark = false
+    }
+  }
 
   const [state, setState] = useState({
     loading:true,
-    search:'',
-    redirect : false,
-    artikel:'',
-    label:labelData
+    news:newsDetails,
+    bookmark:bookmark
   });
 
+
+
+
+  const handleBookmark = (e) => {
+    e.preventDefault();
+    let cacheBookmark = localStorage.getItem('bookmark');
+    let news_id = e.target.attributes[0].nodeValue;
+    if (cacheBookmark === null || cacheBookmark === undefined) {
+
+      let data = [
+        news_id
+      ];
+      
+      localStorage.setItem('bookmark', JSON.stringify(data));
+      setState({
+        ...state,
+        bookmark:true
+      })
+    }else{
+
+      let index = JSON.parse(cacheBookmark).indexOf(news_id);
+      if (index >= 0) {
+        if (index === 0) {
+          let deleteBookmark = JSON.parse(cacheBookmark);
+          deleteBookmark.shift();
+          localStorage.setItem('bookmark', JSON.stringify(deleteBookmark))
+        }else{
+          let deleteBookmark = JSON.parse(cacheBookmark);
+          deleteBookmark.splice(index);
+          localStorage.setItem('bookmark', JSON.stringify(deleteBookmark))
+        }
+
+        setState({
+          ...state,
+          bookmark:false
+        })
+      }else{
+        let newData = JSON.parse(cacheBookmark).concat([news_id]);
+        localStorage.setItem('bookmark', JSON.stringify(newData));
+        setState({
+          ...state,
+          bookmark:true
+        })
+      }
+
+    }
+
+
+
+  }
+
   useEffect(() => {
+    console.log(localStorage.getItem('bookmark'));
     if (state.loading === true) {
       loaderPromise().then(() => setState({...state,loading:false}));
     }
-
   });
-
-
 
   const loaderPromise = () => {
     return new Promise((resolve) => setTimeout(() => resolve(),1000));
   }
 
-  const handleChange = (e) => {
-    return setState({
-      ...state,
-      search:e.target.value
-    })
-  }
-  const resetSearch = () => {
-    if (state.search !== '') {
-      setState({
-        ...state,
-        search:''
-      })
-    }
-  }
-
-  const settings = {
-      dots: false,
-      infinite: false,
-      speed: 500,
-      slidesToShow: 1.5,
-      slidesToScroll: 1
-    };
   return(
     <Fragment>
         {
@@ -249,14 +282,37 @@ const News = (value) => {
           :
           <div />
         }
-        <Navbar className="navbar-content sticky-top">
-          <Navbar.Brand>
-            <Link to="/" style={{textDecoration:'none'}}>
-              <i className="fas fa-arrow-left back title-nav"></i>
+        <Fragment>
+          <div className="navbar-sendiri">
+            {
+              state.news.type === "video" ?
+                <img
+                  src={`https://img.youtube.com/vi/${state.news.image_url.split("=")[1].substr(0,11)}/0.jpg`}
+                  alt="DetailsNews"
+                  className='img-detail-news'
+                />
+              :
+                <img src={state.news.image_url} alt="DetailsNews" className='img-detail-news' />
+            }
+
+            <div className="bg-for-opacity"></div>
+            <Link to="/news" style={{textDecoration:'none'}}>
+              <i className="fas fa-arrow-left detail-arrow"></i>
             </Link>
-            <span className="title-content">Berita</span>
-          </Navbar.Brand>
-        </Navbar>
+            {
+              state.bookmark ?
+              <div onClick={handleBookmark}>
+                <img data-news={state.news.news_id} src="/img/icons8-bookmark1.svg" className="detail-arrow1" alt="DetailsNews" />
+              </div>
+              :
+              <div onClick={handleBookmark}>
+                <img data-news={state.news.news_id} src="/img/icons8-bookmark-add.svg" className="detail-arrow1" alt="DetailsNews" />
+              </div>
+            }
+
+          </div>
+        </Fragment>
+
           {
             state.loading ?
             <Fragment>
@@ -267,79 +323,53 @@ const News = (value) => {
                       <i className="fas fa-spinner spin"></i>
                       <span className="loading-text">Loading...</span>
                     </div>
-                    <span className="loading-text1" style={{left:'28px'}}>Get News Data</span>
+                    <span className="loading-text1" style={{left:'35px'}}>Get Details News</span>
                   </center>
                 </Col>
               </Row>
             </Fragment>
             :
-            <Row className="row-content" style={{bottom:'50px'}}>
-              <Container>
-                <center>
-                  <div className="search-nav">
-                    <i className="fas fa-search icon-search"></i>
-                    <input type="text" placeholder="Search" value={state.search} onChange={handleChange} />
-                  </div>
-                </center>
-                  <Col sm={12} xs={12} className="mt-2 mb-3 row-bed">
-                    <center>
-                      <div className="title-content-active mt-3 mb-3">Recently News</div>
-                    </center>
-                      <Slider {...settings} className="mb-3">
-                        <div className="change-slider-style ">
-                            <Link to={`${url}`} className="link">
-                              <div onClick={resetSearch} className="news-filter-nav shadow-sm mb-3 mt-2">All</div>
-                            </Link>
+            <Fragment>
+              {
+                  <Row className="detail-row-content">
+                    <Col sm={12} xs={12}>
+                      <Container>
+                        <div className="news-ktg-tgl">
+                          <div className="float-left">{state.news.category}</div>
+                          <div className="float-right">15 July 2019</div>
                         </div>
+                      </Container>
+                      <div className="detail-news-title mt-4 mb-1">{state.news.title}</div>
+                    </Col>
+                    <Container>
+                        <Col sm={12} xs={12} className="mt-4">
                         {
-                          state.label.map((data,index) =>
-                            <div className="change-slider-style" key={index}>
-                              <Link to={`${url}/${data.split(' ').join('')}`} className="link">
-                                <div onClick={resetSearch} className="news-filter-nav shadow-sm mb-3 mt-2">{data}</div>
-                              </Link>
-                            </div>
-                          )
+                          state.news.type === 'video' ?
+                          <Iframe
+                            url={`https://www.youtube.com/embed/${state.news.image_url.split("=")[1].substr(0,11)}`}
+                            className="video-news"
+                            display="initial"
+                            position="relative"/>
+                            :
+                            <img src={state.news.image_url} alt="DetailsNews" className='img-detail-news mb-4' />
                         }
-                        <div className="change-slider-style ">
-                            <Link to={`${url}/bookmark`} className="link">
-                              <div onClick={resetSearch} className="news-filter-nav shadow-sm mb-3 mt-2">Bookmark/Saved</div>
-                            </Link>
-                        </div>
-                      </Slider>
-                      <Switch>
-                      {
-                        state.search === '' ?
-                        <Fragment>
-                          <Route exact path={`${path}`}>
-                            <NewsContent label="all" />
-                          </Route>
 
-                          {
-                            state.label.map((data,index) =>
-                            <Route path={`${path}/${data.split(' ').join('')}`} key={index}>
-                              <NewsContent label={data} />
-                            </Route>
-                            )
-                          }
-                          <Route path={`${path}/bookmark`}>
-                            <NewsContent label='bookmark' />
-                          </Route>
-                        </Fragment>
-                        :
-                        <Fragment>
-                          <NewsContent label="all" search={state.search} />
-                        </Fragment>
-                      }
-
-                      </Switch>
-
-                  </Col>
-              </Container>
-            </Row>
+                          <div className="detail-news-content">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                          </div>
+                        </Col>
+                    </Container>
+                  </Row>
+              }
+            </Fragment>
           }
-
     </Fragment>
   )
 }
 
-export default News;
+export default Artikel;

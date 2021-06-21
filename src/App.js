@@ -12,7 +12,9 @@ import InfoBed1 from './Component/Menu/Infobed1';
 import News from './Component/Menu/News';
 import Contact from './Component/Menu/Contact';
 import GlobalProvider from './Context';
-import Test from './Test';
+// import Test from './Test';
+import Artikel from './Component/Artikel';
+import Maps from './Maps/index.jsx';
 
 class App extends Component{
 
@@ -59,8 +61,9 @@ class App extends Component{
             <Route path="/logout">
               Logout
             </Route>
-            <Route path="/artikel">
-              <Test />
+            <Route path="/artikel/:news_id" component={Artikel} />
+            <Route path="/test">
+              <Maps />
             </Route>
           </Switch>
         </Router>

@@ -5,7 +5,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import {Link} from 'react-router-dom';
-import Axios from 'axios';
 
 const bed  = [
     {
@@ -74,7 +73,6 @@ const bed  = [
       "bed_terisi":1,
       "bed_kosong":1
     }
-
 ]
 
 const InfoBed = () => {
@@ -85,13 +83,13 @@ const InfoBed = () => {
     search:''
   });
 
+
+
   useEffect(() => {
     if (state.loading === true) {
       loaderPromise().then(() => setState({...state,loading:false}));
     }
-    Axios
-    .get('https://api.rsudtamansari.com/public_html/bed/status?key=7TmgitdDpPsh8YC8MXkkuzqZ1YOGDwJA')
-    .then((response) => console.log(response));
+
   });
 
   const handleChange = (e) => {
